@@ -1,0 +1,10 @@
+.App-header {
+    display: flex;
+    flex-direction: column;
+    background-color: beige;
+    padding-bottom: 40px;
+    max-height: 400px;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 50px;
+}
