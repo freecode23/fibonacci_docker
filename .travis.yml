@@ -1,0 +1,48 @@
+
+# Travis CI
+
+language: generic 
+# 1. we need super level user premission
+sudo: required
+
+# 2. we need a copy of docker ready to go
+services:
+  - docker
+
+# 3. build docker image
+before_install:
+  # for test. build context is not ".". now the build directory is in the client folder
+  - docker build -t freecode23/docker-react-test -f ./client/Dockerfile.dev ./client
+
+# 4. run test suite
+script:
+  # we need to tell CI=true to say quit after you run the test
+  # give new name for this image
+  - docker run -e CI=true freecode23/react-test npm run test
+
+
+# 5. build production image version and push to docker hub
+# docker build -t freecode23/multi-client <context folder where is the Dockerfile at>
+# it will find the default "Dockerfile"
+after-success:
+  - docker build -t freecode23/multi-client ./client
+  - docker build -t freecode23/multi-nginx ./nginx
+  - docker build -t freecode23/multi-server ./server
+  - docker build -t freecode23/multi-worker ./worker
+
+# 5. deploy to EBS
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "react-test"
+  env: "Reacttest-env"
+  bucket_name: "elasticbeanstalk-us-east-2-850136234717"
+  bucket_path: "react-test"
+  on:
+    # anytime we push to branch main, that's the time to deploy
+    branch: main
+
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: "$AWS_SECRET_KEY"
+
+

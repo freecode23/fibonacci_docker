@@ -10,23 +10,23 @@ class Fib extends Component {
 
     componentDidMount() {
         this.fetchValues();
-        this.fetchIndexes();
+        this.fetchIndices();
     }
 
+    // 3. Fetch datas
     async fetchValues() {
-        console.log("fetching values");
+        console.log("fetching values from redis");
 
         try {
             const values = await axios.get('/api/values/current');
-            console.log("val");
-            console.log(values);
             this.setState({ values: values.data });
         } catch (err) {
             console.log("fetch values err", err);
         }
     }
 
-    async fetchIndexes() {
+    async fetchIndices() {
+        console.log("fetching values from PostGres");
         try {
             const seenIndexes = await axios.get('/api/values/all');
             this.setState({
@@ -37,13 +37,19 @@ class Fib extends Component {
         }
     }
 
+
+
+    // 4. Handler
     handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
+            // - post new index to calc. fibonacci
             const res = await axios.post('/api/values', {
                 index: this.state.index,
             });
+
+            // - save this index
             this.setState({ index: '' });
             console.log("finish submit", res);
         } catch (err) {
@@ -51,6 +57,7 @@ class Fib extends Component {
         }
     };
 
+    // 5. create JSX
     renderSeenIndexes() {
         return this.state.seenIndexes.map(({ number }) => number).join(', ');
     }

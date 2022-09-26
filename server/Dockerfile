@@ -1,0 +1,12 @@
+# production dockerfile
+FROM node:14-alpine
+
+WORKDIR "/app"
+
+COPY package.json .
+RUN npm install -g npm@8.19.2
+RUN npm i
+COPY . .
+
+
+CMD ["npm", "run", "start"]

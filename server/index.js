@@ -44,17 +44,17 @@ const redisClient = redis.createClient({
     retry_strategy: () => 1000
 })
 
-async function run() {
+async function redisConnect() {
     try {
 
         await redisClient.connect();
         console.log("client is open", redisClient.isOpen); // this is false
     } catch (err) {
-        console.log("err", err);
+        console.log("err redis connect>>>", err);
     }
 }
 
-run()
+redisConnect()
 
 
 // - make a duplicate of redisClient
@@ -69,7 +69,6 @@ app.get("/", (req, res) => {
 app.get("/values/all", async (req, res) => {
     console.log("values/all>>>");
     try {
-
         const values = await pgClient.query("SELECT * from values");
         res.send(values.rows);
     } catch (err) {
@@ -88,7 +87,6 @@ app.get("/values/current", async (req, res) => {
             console.log("values",values);
         })
 
-        console.log("finish redis");
     } catch (err) {
         console.log(">>>>>>>>err values curent>>>>", err);
     }
@@ -107,7 +105,6 @@ app.post("/values", async (req, res) => {
        
         // insert to redis
         redisClient.hSet("idxFibval", index, "nothing yet");
-        
     
         // start calculating the fib value
         redisDup.publish("insert", index);
