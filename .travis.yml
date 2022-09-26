@@ -30,19 +30,29 @@ after-success:
   - docker build -t freecode23/multi-server ./server
   - docker build -t freecode23/multi-worker ./worker
 
-# 5. deploy to EBS
-deploy:
-  provider: elasticbeanstalk
-  region: "us-east-2"
-  app: "react-test"
-  env: "Reacttest-env"
-  bucket_name: "elasticbeanstalk-us-east-2-850136234717"
-  bucket_path: "react-test"
-  on:
-    # anytime we push to branch main, that's the time to deploy
-    branch: main
+  # Login to docker CLI
+  # - retrieve password from travis environment variable
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: "$AWS_SECRET_KEY"
+  # take the image and push to docker hub
+  - docker push freecode23/multi-client
+  - docker push freecode23/multi-nginx
+  - docker push freecode23/multi-server
+  - docker push freecode23/multi-worker
+
+# 5. deploy to EBS
+# deploy:
+#   provider: elasticbeanstalk
+#   region: "us-east-2"
+#   app: "react-test"
+#   env: "Reacttest-env"
+#   bucket_name: "elasticbeanstalk-us-east-2-850136234717"
+#   bucket_path: "react-test"
+#   on:
+#     # anytime we push to branch main, that's the time to deploy
+#     branch: main
+
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: "$AWS_SECRET_KEY"
 
 
