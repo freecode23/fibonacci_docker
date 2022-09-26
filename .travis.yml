@@ -18,7 +18,7 @@ before_install:
 script:
   # we need to tell CI=true to say quit after you run the test
   # give new name for this image
-  - docker run -e CI=true freecode23/react-test npm run test
+  - docker run -e CI=true freecode23/docker-react-test npm run test
 
 
 # 5. build production image version and push to docker hub
