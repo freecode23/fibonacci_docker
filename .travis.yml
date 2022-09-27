@@ -44,7 +44,7 @@ after-success:
 # it will pull image from docker hub
 deploy:
   provider: elasticbeanstalk
-  region: 'us-east-1'
+  region: 'us-east-2'
 
   # found on elastic beanstalk instance dashboard
   app: 'fibonacci-react'
