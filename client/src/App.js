@@ -10,7 +10,10 @@ function App() {
       <div className="App">
         <div>
         <header className="App-header">
-          <Link className = "link" to="/otherpage">Other Page</Link>
+          <Link className = "link" to="/otherpage">Home Page</Link>
+          <Link className = "link" to="/otherpage">Home Page</Link>
+          <Link className = "link" to="/otherpage">Home Page</Link>
+          <Link className = "link" to="/otherpage">Home Page</Link>
           <Link className="link"  to={"/"}>Fibonacci</Link>
         </header>
           <Routes>s
