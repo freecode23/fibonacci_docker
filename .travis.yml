@@ -40,19 +40,24 @@ after-success:
   - docker push freecode23/multi-server
   - docker push freecode23/multi-worker
 
-# 5. deploy to EBS
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "us-east-2"
-#   app: "react-test"
-#   env: "Reacttest-env"
-#   bucket_name: "elasticbeanstalk-us-east-2-850136234717"
-#   bucket_path: "react-test"
-#   on:
-#     # anytime we push to branch main, that's the time to deploy
-#     branch: main
+# 6. deploy to EBS, we are only sending docker-compose. 
+# it will pull image from docker hub
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
 
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: "$AWS_SECRET_KEY"
+  # found on elastic beanstalk instance dashboard
+  app: 'fibonacci-react'
+  env: 'Fibonaccireact-env''
+  bucket_name: 'elasticbeanstalk-us-east-2-850136234717'
 
+  # just create own path
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+
+  # set on travis CI dashboard
+  # generate this on IAM dashboard on AWS
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
 

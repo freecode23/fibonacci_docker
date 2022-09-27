@@ -1,0 +1,79 @@
+version: "3"
+services:   
+  # >>> Container 1: 
+  postgres:
+    # - base image (we are not building ourselves)
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+
+  # >>>> Container 2:
+  redis: 
+    # - base image
+    image: "redis:latest"
+    ports:
+      - '6379:6379'
+
+  # >>> Container 3:
+  api:
+    # A. BUILD
+    build:
+      dockerfile: Dockerfile.dev
+
+      # context: which directory to get the codes from and the dockerfile there
+      context: ./server
+
+    # B. VOLUMES
+    # to reference files in container to local so that we don't need to keep rebuilding
+    volumes: 
+      - /app/node_modules
+      # map local's "server" folder ----> container's "app" folder
+      # any change in "server" is reflected in "app"
+      - ./server:/app
+
+    # C. ENV
+    environment:
+      # get the key name from keys.js
+      # - for HOST assign the container name
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+      # - for HOST assign the container name
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+
+  # >>>> Container 4:
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+  # >>>> Container 5:
+  client:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    environment:
+      - WDS_SOCKET_PORT=0
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+  # >>>> Container 6:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      # localhost 3050 to 80 in nginx
+      - '3050:80'
