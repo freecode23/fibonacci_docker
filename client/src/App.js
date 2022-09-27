@@ -11,7 +11,7 @@ function App() {
         <div>
         <header className="App-header">
           <Link className = "link" to="/otherpage">Other Page</Link>
-          <Link className="link"  to={"/"}>Fib</Link>
+          <Link className="link"  to={"/"}>Fibonacci</Link>
         </header>
           <Routes>
             <Route
