@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14-alpine as builder_container
 
 WORKDIR "/app"
 
@@ -9,11 +9,11 @@ COPY . .
 RUN npm run build
 
 # 2. Nginx serving phase
-# copy the build folder from the prev to this NGINX container
+# copy the builder_container phase above folder to this NGINX container
 # from "/app/build" to ""
 FROM nginx
 EXPOSE 3000
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder_container /app/build /usr/share/nginx/html
 
 # will run start nginx by default 
