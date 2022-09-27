@@ -13,7 +13,7 @@ function App() {
           <Link className = "link" to="/otherpage">Other Page</Link>
           <Link className="link"  to={"/"}>Fibonacci</Link>
         </header>
-          <Routes>
+          <Routes>s
             <Route
               path="/otherpage"
               element={<div><OtherPage /></div>}
