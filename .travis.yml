@@ -44,13 +44,13 @@ after-success:
 # it will pull image from docker hub
 deploy:
   provider: elasticbeanstalk
-  region: 'us-east-2'
+  region: "us-east-2"
   # found on elastic beanstalk instance dashboard
-  app: 'fibonacci-react'
-  env: 'Fibonaccireact-env''
-  bucket_name: 'elasticbeanstalk-us-east-2-850136234717'
+  app: "fibonacci-react"
+  env: "Fibonaccireact-env"
+  bucket_name: "elasticbeanstalk-us-east-2-850136234717"
   # just create own path
-  bucket_path: 'docker-multi'
+  bucket_path: "docker-multi"
   on:
     branch: main
   # set on travis CI dashboard
